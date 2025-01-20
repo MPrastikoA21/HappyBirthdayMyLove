@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Previous CSS styles remain unchanged */
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+        }
+
+        .birthday-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            color: #ff6b6b;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .name {
+            color: #2c3e50;
+            font-size: 2em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .age {
+            color: #ff6b6b;
+            font-size: 3em;
+            margin: 20px 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            color: #666;
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        .cake {
+            font-size: 50px;
+            animation: cake-bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes cake-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hearts {
+            position: absolute;
+            font-size: 24px;
+            color: #ff6b6b;
+            animation: float-heart 3s ease-in-out infinite;
+        }
+
+        @keyframes float-heart {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Add audio element with autoplay and muted attributes -->
+    <audio id="bgMusic" autoplay loop>
+        <source src="song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="container">
+        <div class="birthday-card">
+            <h1>Happy Birthday!</h1>
+            <div class="name">Ni Luh Sukma Anggraeni</div>
+            <div class="age">23</div>
+            <div class="cake">🎂</div>
+            <p class="message">
+                Wishing you a day filled with joy, laughter, and countless beautiful moments.<br>
+                May all your dreams and wishes come true!<br>
+                Have an amazing birthday celebration! 🎉
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Previous animation JavaScript
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffbe0b', '#ff006e', '#8338ec'];
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.opacity = Math.random();
+            document.body.appendChild(confetti);
+
+            confetti.addEventListener('animationend', () => {
+                confetti.remove();
+            });
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'hearts';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+
+        setInterval(createConfetti, 100);
+        setInterval(createHeart, 500);
+
+        // New autoplay handling code
+        const audio = document.getElementById('bgMusic');
+
+        // Function to force autoplay
+        function forcePlay() {
+            audio.play()
+                .catch(() => {
+                    // If autoplay fails, try again on user interaction
+                    document.addEventListener('click', () => {
+                        audio.play();
+                    }, { once: true });
+                });
+        }
+
+        // Try to play on page load
+        window.addEventListener('load', forcePlay);
+
+        // Try to play on user interaction
+        document.addEventListener('click', forcePlay);
+        document.addEventListener('touchstart', forcePlay);
+        document.addEventListener('keydown', forcePlay);
+
+        // Try to play when visibility changes (tab becomes active)
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                forcePlay();
+            }
+        });
+    </script>
+</body>
+</html>
